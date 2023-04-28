@@ -4,7 +4,11 @@ class UserController {
   async store(req, res) {
     try {
       const user = await User.create(req.body);
-      return res.json(user);
+      return res.json({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      });
     } catch (error) {
       console.log(error);
       return res.status(400).json({
@@ -31,14 +35,17 @@ class UserController {
       console.log(error);
       return res.status(500).json(null);
     }
-
   }
 
   async update(req, res) {
     try {
-      const user = await User.findByPk(req.params.id);
+      const user = await User.findByPk(req.user.id);
       await user.update(req.body);
-      return res.json(user);
+      return res.json({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      });
     } catch (error) {
       console.log(error);
       return res.status(400).json({
@@ -48,7 +55,7 @@ class UserController {
   }
 
   async delete(req, res) {
-    const user = await User.findByPk(req.params.id);
+    const user = await User.findByPk(req.user.id);
     await user.destroy();
     return res.json({ message: "usuário excluído com sucesso!" });
   }
