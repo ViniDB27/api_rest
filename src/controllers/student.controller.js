@@ -8,13 +8,50 @@ class StudentController {
   }
 
   async index(req, res) {
-    const students = await Student.findAll();
+    const students = await Student.findAll({
+      attributes: [
+        "id",
+        "firstname",
+        "lastname",
+        "email",
+        "age",
+        "weight",
+        "height",
+      ],
+      order: [
+        ["id", "DESC"],
+        [Photo, "id", "DESC"],
+      ],
+      include: {
+        model: Photo,
+        attributes: ["originalname", "filename"],
+      },
+    });
 
     res.json(students);
   }
 
   async show(req, res) {
-    const student = await Student.findByPk({ id: req.params.id });
+    const student = await Student.findByPk({
+      id: req.params.id,
+      attributes: [
+        "id",
+        "firstname",
+        "lastname",
+        "email",
+        "age",
+        "weight",
+        "height",
+      ],
+      order: [
+        ["id", "DESC"],
+        [Photo, "id", "DESC"],
+      ],
+      include: {
+        model: Photo,
+        attributes: ["originalname", "filename"],
+      },
+    });
 
     res.json(student);
   }
